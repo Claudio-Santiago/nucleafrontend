@@ -124,7 +124,7 @@
         event.preventDefault();
         const form = document.getElementById("formSaldo");
         alert("Aguarde a consulta ser processada pelo Provedor");
-        const saldo = await contract.nomeEmissor(form.formTo.value);
+        const saldo = await contract.nomeEmissor();
         form.formAmount.value = saldo;
       }
 
