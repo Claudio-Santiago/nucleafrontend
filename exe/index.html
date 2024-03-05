@@ -36,10 +36,6 @@
                 <span id="dataEmissao">Buscando informação...</span>
             </div>
             <div>
-                <label>Prazo Pagamento:</label>
-                <span id="prazoPagamento">Buscando informação...</span>
-            </div>
-            <div>
                 <label>Rating:</label>
                 <span id="rating">Buscando informação...</span>
             </div>
@@ -47,14 +43,12 @@
         </section>
         <hr />
         <section>
-            <h2>Novo Token</h2>
+            <h2>Mudar Rating</h2>
             <div>
               <form action="" name="formMudaRating" id="formMudaRating" method="get">
-                <label for="formAmount">Quantidade:</label>
-                <br /><br />
                 <input type="text" placeholder="AAA" required name="formRating" id="formRating" />
                 <br /><br />
-                <input id="btnMudaRating" type="button" value="Alterar" onclick="mudaRating()" />
+                <input id="btnMudaRating" type="button" value="Alterar" onclick="alterarRating()" />
               </form>
             </div>
           </section>
@@ -105,10 +99,6 @@
         const debentureDataEmissao = document.getElementById("dataEmissao");
         debentureDataEmissao.innerHTML = debentureDataEmissaoObj;
 
-        //const debenturePrazoPagamentoObj = await contract.prazoPagamento();
-        //const debenturePrazoPagamento = document.getElementById("prazoPagamento");
-        //debenturePrazoPagamento.innerHTML = debenturePrazoPagamentoObj;
-
         getRating();
 
       }
@@ -127,7 +117,7 @@
     }
 
 
-    async function mudaRating() {
+    async function alterarRating() {
         event.preventDefault();
         const btn = document.getElementById("btnMudaRating");
         btn.value = "Processando...";
