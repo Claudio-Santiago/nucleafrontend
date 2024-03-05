@@ -72,35 +72,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.6.1/ethers.umd.min.js"></script>
     <script>
       async function init() {
-        if (window.ethereum == null) {
-          // If MetaMask is not installed, we use the default provider,
-          // which is backed by a variety of third-party services (such
-          // as INFURA). They do not have private keys installed so are
-          // only have read-only access
-          console.log("MetaMask not installed; using read-only defaults");
-          //provider = ethers.getDefaultProvider();
-          provider = new ethers.InfuraProvider("sepolia");
-          network = await provider.getNetwork();
-          contract = new ethers.Contract(contractAddress, abi, provider);
-          console.log("selected provider: ", provider);
-          console.log("network:", network);
-        } else {
-          // Connect to the MetaMask EIP-1193 object. This is a standard
-          // protocol that allows Ethers access to make all read-only
-          // requests through MetaMask.
-          provider = new ethers.BrowserProvider(window.ethereum);
-          // It also provides an opportunity to request access to write
-          // operations, which will be performed by the private key
-          // that MetaMask manages for the user.
-          alert("O Metamask irá pedir aprovação para acessar essa página.\nPor favor, aceite.");
-          signer = await provider.getSigner();
-          network = await provider.getNetwork();
-          contract = new ethers.Contract(contractAddress, abi, signer);
-          console.log("signer: ", signer);
-          console.log("contract: ", contract);
-          const networkAccount = document.getElementById("networkAccount");
-          networkAccount.innerHTML = signer.address;
-        }
+        provider = new ethers.InfuraProvider("sepolia");
+        network = await provider.getNetwork();
+        contract = new ethers.Contract(contractAddress, abi, provider);
+        console.log("selected provider: ", provider);
+        console.log("network:", network);
 
         ABIHelper = new ethers.Interface(abi);
 
