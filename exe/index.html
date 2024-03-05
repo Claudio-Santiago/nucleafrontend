@@ -9,12 +9,12 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <title>Exercício Token - ERC20</title>
+    <title>Exercício Debenture</title>
   </head>
   <body>
     <header>
       <div class="container">
-        <h1>Exercício Token - ERC20</h1>
+        <h1>Exercício Debenture</h1>
       </div>
     </header>
     <br />
@@ -22,10 +22,11 @@
       <div class="container">
         <section>
           <h3>
-            Dados Token:
-            <span id="tokenNome">Buscando informação...</span>
-            -
-            <span id="tokenSimbolo">Buscando informação...</span>
+            Dados Debenture:
+            <div>
+                <label for="formTo">Nome emissor:</label>
+                <span id="debentureNome">Buscando informação...</span>
+            </div>
           </h3>
           <h3>Total circulante: <span id="tokenTotalSupply">Buscando informação...</span></h3>
         </section>
@@ -91,9 +92,9 @@
         networkNetworkID.innerHTML = network.chainId;
 
         // Obtem dados do contrato
-        const tokenNomeObj = await contract.name();
-        const tokenNome = document.getElementById("tokenNome");
-        tokenNome.innerHTML = tokenNomeObj;
+        const debentureNomeObj = await contract.nomeEmissor();
+        const debentureNome = document.getElementById("debentureNome");
+        debentureNome.innerHTML = debentureNomeObj;
 
         const tokenSimboloObj = await contract.symbol();
         console.log("tokenSimbolo: ", tokenSimboloObj);
