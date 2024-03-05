@@ -116,8 +116,15 @@
         debentureRating.innerHTML = debentureRatingObj;
     }
 
-
     async function alterarRating() {
+      let novoRating = document.getElementById("formRating").value
+      const transacaoRating = await contract.mudaRating(novoRating)
+      await transacaoRating.wait()
+      await getRating();
+      }
+
+
+    async function alterarRatingOld() {
         event.preventDefault();
         const btn = document.getElementById("btnMudaRating");
         btn.value = "Processando...";
