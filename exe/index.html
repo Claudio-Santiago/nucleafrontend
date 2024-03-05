@@ -24,40 +24,40 @@
           <h3>
             Dados Debenture:
             <div>
-                <label for="formTo">Nome emissor:</label>
+                <label>Nome emissor:</label>
                 <span id="debentureNome">Buscando informação...</span>
             </div>
-          </h3>
-          <h3>Total circulante: <span id="tokenTotalSupply">Buscando informação...</span></h3>
+            <div>
+                <label>Valor nominal:</label>
+                <span id="valorNominal">Buscando informação...</span>
+            </div>
+            <div>
+                <label>Data Emissao:</label>
+                <span id="dataEmissao">Buscando informação...</span>
+            </div>
+            <div>
+                <label>Prazo Pagamento:</label>
+                <span id="prazoPagamento">Buscando informação...</span>
+            </div>
+            <div>
+                <label>Rating:</label>
+                <span id="rating">Buscando informação...</span>
+            </div>
+
         </section>
         <hr />
         <section>
-          <h2>Saldo em Tokens</h2>
-          <div>
-            <form action="" name="formSaldo" id="formSaldo" method="get">
-              <label for="formTo">Endereço cliente:</label>
-              <br /><br />
-              <input
-                size="100"
-                maxlength="45"
-                type="text"
-                placeholder="<0x...>"
-                required
-                name="formTo"
-                id="formTo"
-                style="width: 500px"
-              />
-              <br /><br />
-              <label for="formAmount">Quantidade:</label>
-              <br /><br />
-              <input type="text" disabled name="formAmount" id="formAmount" />
-              <br /><br />
-              <input type="button" value="Consultar" onclick="consultar()" />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="reset" value="Limpar" />
-            </form>
-          </div>
-        </section>
+            <h2>Novo Token</h2>
+            <div>
+              <form action="" name="formMudaRating" id="formMudaRating" method="get">
+                <label for="formAmount">Quantidade:</label>
+                <br /><br />
+                <input type="text" placeholder="AAA" required name="formRating" id="formRating" />
+                <br /><br />
+                <input id="btnMudaRating" type="button" value="Alterar" onclick="mudaRating()" />
+              </form>
+            </div>
+          </section>
         <hr />
         <section>
           <h2>Rede e Infra</h2>
@@ -96,23 +96,21 @@
         const debentureNome = document.getElementById("debentureNome");
         debentureNome.innerHTML = debentureNomeObj;
 
-        const tokenSimboloObj = await contract.symbol();
-        console.log("tokenSimbolo: ", tokenSimboloObj);
-        const tokenSimbolo = document.getElementById("tokenSimbolo");
-        tokenSimbolo.innerHTML = tokenSimboloObj;
+        const debentureValorNominalObj = await contract.valorNominal();
+        //console.log("debentureSimbolo: ", debentureValorNominalObj);
+        const debentureValorNominal = document.getElementById("valorNominal");
+        debentureValorNominal.innerHTML = debentureValorNominalObj;
 
-        const tokenTotalSupplyObj = await contract.totalSupply();
-        const tokenTotalSupply = document.getElementById("tokenTotalSupply");
-        tokenTotalSupply.innerHTML = tokenTotalSupplyObj;
+        const debentureDataEmissaoObj = await contract.dataEmissao();
+        const debentureDataEmissao = document.getElementById("dataEmissao");
+        debentureDataEmissao.innerHTML = debentureDataEmissaoObj;
 
-        const filtroEvento = contract.filters.Transfer;
-        eventos = await contract.queryFilter(filtroEvento, -90000);
-        console.log("Numero de transferencias: ", eventos.length);
-        if (eventos.length > 0) {
-          eventos.forEach((evento) => {
-            parseLogTransferencia(evento);
-          });
-        }
+        const debenturePrazoPagamentoObj = await contract.prazoPagamento();
+        const debenturePrazoPagamento = document.getElementById("prazoPagamento");
+        debenturePrazoPagamento.innerHTML = debenturePrazoPagamentoObj;
+
+        getRating();
+
       }
 
       function parseLogTransferencia(evento) {
@@ -121,12 +119,32 @@
       }
     </script>
     <script>
-      async function consultar() {
+
+    async function getRating() {
+        const debentureRatingObj = await contract.rating();
+        const debentureRating = document.getElementById("rating");
+        debentureRating.innerHTML = debentureRatingObj;
+    }
+
+
+    async function mudaRating() {
         event.preventDefault();
-        const form = document.getElementById("formSaldo");
-        alert("Aguarde a consulta ser processada pelo Provedor");
-        const saldo = await contract.nomeEmissor();
-        form.formAmount.value = saldo;
+        const btn = document.getElementById("btnMudaRating");
+        btn.value = "Processando...";
+        alert("Aguarde e confirme a transação no Metamask");
+        const form = document.getElementById("formMudaRating");
+        const tx = await contract.mudaRating(form.formRating.value);
+        console.log("tx enviada: ", tx);
+        alert("Transação enviada a Blockchain. Aguarde.\nID: " + tx.hash);
+        const txReceipt = await tx.wait();
+        console.log("txReceipt: ", txReceipt);
+        if (txReceipt.status === 1) {
+          await atualizaTotalSupply();
+          alert("Rating alterado.");
+          btn.value = "Alterar";
+          form.reset();
+        }
+        getRating();
       }
 
       let signer = null;
